@@ -1,21 +1,28 @@
+import { useState, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import { BsFillPersonFill } from "react-icons/bs";
-// import { FaFaceGrinHearts, FaBagShopping, FaSearch } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { FaSearch, FaShippingFast, FaUndoAlt, FaHeadset } from "react-icons/fa";
 import { FaFaceGrinHearts, FaBagShopping, FaUserPlus } from "react-icons/fa6";
-
-import { FaBars, FaTimes } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 const Header = () => {
   const bag = useSelector((store) => store.bag);
   const wishlist = useSelector((store) => store.wishlist);
-  const [searchQuery, setSearchQuery] = useState("");
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const navigate = useNavigate();
+
+  // Track screen width so React re-renders on resize
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const navLinks = [
     { label: "Men", path: "/category/men" },
@@ -26,39 +33,19 @@ const Header = () => {
     { label: "Studio", path: "/category/studio", badge: "New" },
   ];
 
-  const quickSearches = [
-    "New Arrivals",
-    "Casual Wear",
-    "Sneakers",
-    "Kids Essentials",
-    "Home Decor",
-  ];
-
+  // Scrolled header effect
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery("");
-    }
-  };
-
-  const handleQuickSearch = (term) => {
-    navigate(`/search?q=${encodeURIComponent(term)}`);
-    setIsMenuOpen(false);
-  };
 
   return (
     <header className={`main-header ${isScrolled ? "scrolled" : ""}`}>
       <div className="header-container">
         <div className="header-main-row">
+          {/* Logo */}
           <div className="logo_container">
             <Link to="/" className="logo-link">
               <img
@@ -76,22 +63,25 @@ const Header = () => {
             </Link>
           </div>
 
-          <nav className={`nav_bar ${isMenuOpen ? "mobile-open" : ""}`}>
-            {navLinks.map(({ label, path, badge }) => (
-              <NavLink
-                key={path}
-                to={path}
-                onClick={() => setIsMenuOpen(false)}
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? "active" : ""}`
-                }
-              >
-                <span>{label}</span>
-                {badge && <sup className="new-badge">{badge}</sup>}
-              </NavLink>
-            ))}
-          </nav>
+          {/* Desktop Nav (show only if > 765px) */}
+          {screenWidth > 765 && (
+            <nav className="nav_bar">
+              {navLinks.map(({ label, path, badge }) => (
+                <NavLink
+                  key={path}
+                  to={path}
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? "active" : ""}`
+                  }
+                >
+                  <span>{label}</span>
+                  {badge && <sup className="new-badge">{badge}</sup>}
+                </NavLink>
+              ))}
+            </nav>
+          )}
 
+          {/* Action Icons */}
           <div className="action_bar">
             <Link to="/login" className="action_link">
               <div className="action_container">
@@ -99,12 +89,14 @@ const Header = () => {
                 <span className="action_name">Login</span>
               </div>
             </Link>
+
             <Link to="/signup" className="action_link">
               <div className="action_container">
                 <FaUserPlus className="action_icon" />
                 <span className="action_name">Sign Up</span>
               </div>
             </Link>
+
             <Link to="/wishlist" className="action_link">
               <div className="action_container">
                 <FaFaceGrinHearts className="action_icon" />
@@ -116,6 +108,7 @@ const Header = () => {
                 )}
               </div>
             </Link>
+
             <Link to="/bag" className="action_link">
               <div className="action_container">
                 <FaBagShopping className="action_icon" />
@@ -127,44 +120,99 @@ const Header = () => {
             </Link>
           </div>
 
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
+          {/* Mobile Menu Button (hamburger) */}
+          {screenWidth <= 765 && !isMenuOpen && (
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Open menu"
+              style={{
+                position: "absolute",
+                right: 16,
+                top: 16,
+                background: "none",
+                border: "none",
+                fontSize: "2rem",
+                cursor: "pointer",
+                zIndex: 2000,
+              }}
+            >
+              <FaBars />
+            </button>
+          )}
         </div>
-        <div className="header-bottom-row">
-          <form
-            className={`search_bar ${isSearchFocused ? "focused" : ""}`}
-            onSubmit={handleSearch}
-          >
-            <FaSearch className="search_icon" />
-            <input
-              className="search_input"
-              placeholder="Search for products, brands and more"
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-            />
-          </form>
 
-          <div className="header-quick-links">
-            {quickSearches.map((term) => (
+        {/* Sidebar for Mobile Nav */}
+        {isMenuOpen && screenWidth <= 765 && (
+          <div
+            className="sidebar-nav"
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              width: screenWidth <= 460 ? "100vw" : "320px",
+              height: "100vh",
+              background: "#fff",
+              boxShadow: "-2px 0 12px rgba(0,0,0,0.12)",
+              zIndex: 999,
+              display: "flex",
+              flexDirection: "column",
+              padding: "32px 24px",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button
-                key={term}
-                type="button"
-                className="quick-link-chip"
-                onClick={() => handleQuickSearch(term)}
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: "2rem",
+                  cursor: "pointer",
+                }}
               >
-                {term}
+                <FaTimes />
               </button>
-            ))}
+            </div>
+
+            <nav
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "18px",
+                marginTop: "32px",
+              }}
+            >
+              {navLinks.map(({ label, path, badge }) => (
+                <NavLink
+                  key={path}
+                  to={path}
+                  onClick={() => setIsMenuOpen(false)}
+                  style={{
+                    fontWeight: 500,
+                    fontSize: "1.2rem",
+                    color: "#282c3f",
+                    padding: "10px 0",
+                    borderBottom: "1px solid #eee",
+                    textDecoration: "none",
+                  }}
+                >
+                  {label}
+                  {badge && (
+                    <sup
+                      style={{
+                        color: "#ff4081",
+                        fontWeight: 700,
+                        marginLeft: 4,
+                      }}
+                    >
+                      {badge}
+                    </sup>
+                  )}
+                </NavLink>
+              ))}
+            </nav>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );

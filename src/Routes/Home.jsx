@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 
+
 const Home = () => {
   const allItems = useSelector((store) => store.items);
   const [filters, setFilters] = useState({ price: "", rating: "" });
