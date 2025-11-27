@@ -544,7 +544,7 @@ header {
 .main-footer {
     background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
     color: #ffffff;
-    margin-top: 80px;
+    margin-top: 50px;
 }
 
 .footer_container {
@@ -558,6 +558,7 @@ header {
 
 .footer_column {
     display: flex;
+    align-items: center;
     flex-direction: column;
 }
 
@@ -802,6 +803,7 @@ header {
 .payment-methods {
     display: flex;
     align-items: center;
+    margin: auto;
     gap: 15px;
     color: #b8b8b8;
     font-size: 13px;
@@ -825,6 +827,7 @@ header {
 .copyright {
     color: #94969f;
     font-size: 13px;
+    margin: auto;
 }
 
 .item-container {
