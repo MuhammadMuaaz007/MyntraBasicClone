@@ -81,7 +81,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="copyright">
-            © 2024 www.myntra.com. All rights reserved.
+            © 2025 www.myntra.com. All rights reserved. (Developed by Muhammad Muaaz)
           </div>
         </div>
       </div>

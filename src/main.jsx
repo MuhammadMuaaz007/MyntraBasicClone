@@ -14,6 +14,8 @@ import Search from "./Routes/Search.jsx";
 import Category from "./Routes/Category.jsx";
 import Contact from "./Routes/Contact.jsx";
 import FAQ from "./Routes/FAQ.jsx";
+import Login from "./Routes/Login.jsx";
+import Signup from "./Routes/Signup.jsx";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
       {
         path: "/faq",
         element: <FAQ />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
       },
     ],
   },

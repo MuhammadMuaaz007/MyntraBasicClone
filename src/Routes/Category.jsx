@@ -11,14 +11,14 @@ const Category = () => {
   const [sortBy, setSortBy] = useState("");
 
   const categoryMap = {
-    men: ["Men", "Nike", "ADIDAS", "The  Garage Co", "Nivea"],
-    women: ["Women", "CUKOO", "NUEVOSDAMAS", "Carlton London"],
-    kids: ["Kids"],
-    "home-living": ["Home", "Living"],
-    beauty: ["Beauty", "Nivea"],
+    men: ["Men", "Nike", "ADIDAS", "The  Garage Co", "Nivea", "Roadster", "HRX", "Levi", "Pulse"],
+    women: ["Women", "CUKOO", "NUEVOSDAMAS", "Carlton London", "H&M", "Zara", "Forever 21", "TrendLab"],
+    kids: ["Kids", "MiniKidz", "BrightSteps", "Galaxy", "Essentials"],
+    "home-living": ["Home", "Living", "Casa", "Haven", "Aura", "Decor", "Planter"],
+    beauty: ["Beauty", "Nivea", "Bloom"],
     "gift-card": [],
     insider: [],
-    studio: []
+    studio: ["Studio", "TrendLab", "Bloom", "Sneaker Vault", "Aura Studio"]
   };
 
   const categoryKeywords = categoryMap[category] || [];
