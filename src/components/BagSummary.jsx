@@ -8,7 +8,7 @@ const BagSummary = () => {
     return itemIndex >= 0;
   });
 
-  const CONVENIENCE_FEES = 0;
+  const CONVENIENCE_FEES = 99;
   let totalItem = bagItemIds.length;
   let totalMRP = 0;
   let totalDiscount = 0;
@@ -26,25 +26,32 @@ const BagSummary = () => {
         <div className="price-header">PRICE DETAILS ({totalItem} Items) </div>
         <div className="price-item">
           <span className="price-item-tag">Total MRP</span>
-          <span className="price-item-value">₹{totalMRP}</span>
+          <span className="price-item-value">PKR {totalMRP}</span>
         </div>
         <div className="price-item">
           <span className="price-item-tag">Discount on MRP</span>
           <span className="price-item-value priceDetail-base-discount">
-            -₹{totalDiscount}
+            -PKR {totalDiscount}
           </span>
         </div>
         <div className="price-item">
           <span className="price-item-tag">Convenience Fee</span>
-          <span className="price-item-value">₹99</span>
+          <span className="price-item-value">PKR {CONVENIENCE_FEES}</span>
         </div>
         <hr />
         <div className="price-footer">
           <span className="price-item-tag">Total Amount</span>
-          <span className="price-item-value">₹{finalPayment}</span>
+          <span className="price-item-value">PKR {finalPayment}</span>
         </div>
       </div>
-      <button className="btn-place-order">
+      <button 
+        className="btn-place-order"
+        onClick={() => {
+          if (finalItems.length > 0) {
+            alert(`Order placed successfully! Total: PKR ${finalPayment}\n\nItems will be delivered to your address.\nThank you for shopping with us!`);
+          }
+        }}
+      >
         <div className="css-xjhrni">PLACE ORDER</div>
       </button>
     </div>
